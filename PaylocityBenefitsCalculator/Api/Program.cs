@@ -1,3 +1,6 @@
+using Api;
+using Api.Extensions;
+using Api.Mapping;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +21,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.RegisterScoped();
+builder.Services.RegisterSingleton();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 var allowLocalhost = "allow localhost";
 builder.Services.AddCors(options =>
 {
@@ -26,6 +34,10 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+using (var context = scope.ServiceProvider.GetService<InMemoryDbContext>())
+    context!.Database.EnsureCreated();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
