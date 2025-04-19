@@ -9,6 +9,8 @@ namespace Api.Extensions
         {
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IDependentRepository, DependentRepository>();
+            services.AddScoped<IDependentService, DependentService>();
         }
 
         public static void RegisterSingleton(this IServiceCollection services)
