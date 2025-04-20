@@ -35,14 +35,13 @@ public class EmployeesController : ControllerBase
             else
             {
                 response.Message = $"Employee with id: {id} was not wound";
-
                 return NotFound(response);
             }
         }
         catch(Exception ex)
         {
-            response.Error = ex.Message;
-
+            // TODO: log exception
+            response.Error = "Unexpected error occured";
             return BadRequest(response);
         }       
     }

@@ -8,4 +8,6 @@ public class Employee
     public decimal Salary { get; set; }
     public DateTime DateOfBirth { get; set; }
     public ICollection<Dependent> Dependents { get; set; } = new List<Dependent>();
+    public bool HasPartner => Dependents.Any(x => x.Relationship == Relationship.Spouse ||
+                                                  x.Relationship == Relationship.DomesticPartner);
 }

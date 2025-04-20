@@ -1,6 +1,5 @@
 ﻿using Api.Abstractions;
 using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -24,7 +23,6 @@ public class DependentsController : ControllerBase
     public async Task<ActionResult<ApiResponse<GetDependentDto>>> Get(int id)
     {
         var response = new ApiResponse<GetDependentDto>();
-
         try
         {
             var dependent = await _service.Get(id);
@@ -66,7 +64,8 @@ public class DependentsController : ControllerBase
         } 
         catch (Exception ex) 
         {
-            response.Error = ex.Message;
+            // TODO: log exception
+            response.Error = "Unexpected error occured";
 
             return BadRequest(response);
         }

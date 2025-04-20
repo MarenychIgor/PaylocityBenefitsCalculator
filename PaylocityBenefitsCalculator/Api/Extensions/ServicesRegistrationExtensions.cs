@@ -11,6 +11,7 @@ namespace Api.Extensions
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IDependentRepository, DependentRepository>();
             services.AddScoped<IDependentService, DependentService>();
+            services.AddScoped<IPaycheckCalculationService, PaycheckCalculationService>();
         }
 
         public static void RegisterSingleton(this IServiceCollection services)
