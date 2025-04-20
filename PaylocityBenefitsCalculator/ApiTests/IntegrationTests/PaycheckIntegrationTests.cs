@@ -28,7 +28,6 @@ namespace ApiTests.IntegrationTests
                 EmployeeLastName = "James",
                 GrossAmount = 2900.81M,
                 NetAmmount = 2439.27M,
-                Deductions = new List<Deduction> { new (){ Name = "Employee benefit cost", Amount =  461.54M } },
                 DeductedAmount = 461.54M
             };
 

@@ -8,32 +8,27 @@ namespace Api.Services
     public class PaycheckCalculationService : IPaycheckCalculationService
     {
         private const int NUMBER_OF_PAYCHECKS = 26;
-        private const decimal MONTLY_BASE_BENEFIT_COST = 1000;
-        private const decimal YEARLY_SALARY_TRESHOLD_VALUE = 80000;
-        private const decimal SALARY_ABOVE_TRESHOLD_COEFFICIENT = 0.02M;
-        private const decimal DEPENDENT_MONTLY_BASE_BENEFIT_COST = 600;
-        private const int DISCOUNTED_DEPENDENT_AGE_TRESHOLD = 50;
-        private const decimal DEPENDENT_AGE_OVER_TRESHOLD_MONTLY_BENEFIT_ADDED_COST = 200;
-        
-        private readonly IEmployeeRepository _repository;
 
-        public PaycheckCalculationService(IEmployeeRepository repository)
-            => _repository = repository;
+        private readonly IEmployeeRepository _repository;
+        private readonly IDeductionPluginsProvider _pluginProvider;
+
+        public PaycheckCalculationService(IEmployeeRepository repository, IDeductionPluginsProvider pluginsProvider)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _pluginProvider = pluginsProvider ?? throw new ArgumentNullException(nameof(pluginsProvider));
+        }
 
         public async Task<GetPaycheckDto?> Calculate(int employeeId, DateTime paycheckDate)
-        {
+        {           
             var employee = await _repository.Get(employeeId);
             if(employee == null)
             {
                 return null; 
             }
 
-            var baseBenefitCost = (GetBaseBenefitCost(employee) / NUMBER_OF_PAYCHECKS).Round();
-            var dependentsBenefitCost = (GetDependentsBenefitCost(employee.Dependents, paycheckDate) / NUMBER_OF_PAYCHECKS).Round();
-
-            var deductedAmount = baseBenefitCost + dependentsBenefitCost;
+            var deductions = GetDeductionTotal(employee, paycheckDate);
             var grossSalary = (employee.Salary / NUMBER_OF_PAYCHECKS).Round();
-            var netSalary = grossSalary - deductedAmount;
+            var netSalary = grossSalary - deductions;
 
             return new GetPaycheckDto
             {
@@ -42,57 +37,20 @@ namespace Api.Services
                 EmployeeLastName = employee.LastName!,
                 GrossAmount = grossSalary,
                 NetAmmount = netSalary,
-                Deductions = GetDeductionTranscript(baseBenefitCost, dependentsBenefitCost),
-                DeductedAmount = deductedAmount
+                DeductedAmount = deductions
             };
         }
 
-        private decimal GetBaseBenefitCost(Employee employee)
+        private decimal GetDeductionTotal(Employee employee, DateTime paycheckDate)
         {
-            var baseBenefitCost = default(decimal);
-            if (employee.Salary > YEARLY_SALARY_TRESHOLD_VALUE)
+            var deductions = default(decimal);
+            var plugins = _pluginProvider.GetPlugins();
+            foreach (var plugin in plugins)
             {
-                baseBenefitCost = employee.Salary * SALARY_ABOVE_TRESHOLD_COEFFICIENT;
-            }
-
-            return MONTLY_BASE_BENEFIT_COST * 12 + baseBenefitCost;
-        }
-
-        private decimal GetDependentsBenefitCost(ICollection<Dependent> dependents, DateTime paycheckDate)
-        {
-            var totalBenefitConst = default(decimal);
-            foreach (var dependent in dependents)
-            {
-                totalBenefitConst += DEPENDENT_MONTLY_BASE_BENEFIT_COST;
-
-                var age = GetDependentAge(dependent.DateOfBirth, paycheckDate);
-                if(age >= DISCOUNTED_DEPENDENT_AGE_TRESHOLD)
-                {
-                    totalBenefitConst += DEPENDENT_AGE_OVER_TRESHOLD_MONTLY_BENEFIT_ADDED_COST;
-                }
-            }
-
-            return totalBenefitConst * 12;
-        }
-
-        private List<Deduction> GetDeductionTranscript(decimal baseBenefitCost, decimal dependentsBenefitCost)
-        {
-            var deductions = new List<Deduction> { new() { Name = "Employee benefit cost", Amount = baseBenefitCost } };
-            if(dependentsBenefitCost != default)
-            {
-                deductions.Add(new Deduction { Name = "Dependents benefit cost", Amount = dependentsBenefitCost });
+                deductions += plugin.CalculateDeduction(employee, paycheckDate);
             }
 
             return deductions;
-        }
-
-        private int GetDependentAge(DateTime dateOfBirth, DateTime paycheckDate)
-        {
-            var roughAge = paycheckDate.Year - dateOfBirth.Year;
-
-            return paycheckDate.Month > dateOfBirth.Month || (paycheckDate.Month == dateOfBirth.Month && paycheckDate.Day >= dateOfBirth.Day)
-                ? roughAge + 1
-                : roughAge;
         }
     }
 }

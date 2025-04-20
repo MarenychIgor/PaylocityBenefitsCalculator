@@ -1,6 +1,4 @@
-﻿using Api.Models;
-
-namespace Api.Dtos.Paycheck
+﻿namespace Api.Dtos.Paycheck
 {
     public class GetPaycheckDto
     {
@@ -9,7 +7,6 @@ namespace Api.Dtos.Paycheck
         public string EmployeeLastName { get; set; }
         public decimal GrossAmount { get; set; }
         public decimal NetAmmount {  get; set; }
-        public ICollection<Deduction> Deductions { get; set; } = new List<Deduction>();
         public decimal DeductedAmount {  get; set; }
     }
 }

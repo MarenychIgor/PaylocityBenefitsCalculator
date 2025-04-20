@@ -15,6 +15,9 @@ namespace Api.Extensions
         }
 
         public static void RegisterSingleton(this IServiceCollection services)
-            => services.AddSingleton<InMemoryDbContext>();
+        {
+            services.AddSingleton<InMemoryDbContext>();
+            services.AddSingleton<IDeductionPluginsProvider, DeductionPluginsProvider>();
+        }
     }
 }
