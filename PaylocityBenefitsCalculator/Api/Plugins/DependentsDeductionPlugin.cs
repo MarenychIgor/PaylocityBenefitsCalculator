@@ -6,6 +6,7 @@ namespace Api.DeductionPlugins
 {
     public class DependentsDeductionPlugin : IDeductionPlugin
     {
+        // TODO: move to config
         private const int NUMBER_OF_PAYCHECKS = 26;
         private const decimal DEPENDENT_MONTLY_BASE_BENEFIT_COST = 600;
         private const int DISCOUNTED_DEPENDENT_AGE_TRESHOLD = 50;
@@ -31,12 +32,13 @@ namespace Api.DeductionPlugins
             return totalBenefitConst * 12;
         }
 
+        // We can't rely on simple age logic calculation, because dependend birthday may be after paycheck date.
         private int GetDependentAge(DateTime dateOfBirth, DateTime paycheckDate)
         {
             var roughAge = paycheckDate.Year - dateOfBirth.Year;
 
-            return paycheckDate.Month > dateOfBirth.Month || (paycheckDate.Month == dateOfBirth.Month && paycheckDate.Day >= dateOfBirth.Day)
-                ? roughAge + 1
+            return paycheckDate.Month < dateOfBirth.Month || (paycheckDate.Month == dateOfBirth.Month && paycheckDate.Day < dateOfBirth.Day)
+                ? roughAge - 1
                 : roughAge;
         }
     }

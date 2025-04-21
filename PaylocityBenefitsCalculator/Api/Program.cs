@@ -5,10 +5,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -35,11 +33,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Create in memory db on app start.
 using (var scope = app.Services.CreateScope())
 using (var context = scope.ServiceProvider.GetService<InMemoryDbContext>())
     context!.Database.EnsureCreated();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -56,4 +54,5 @@ app.MapControllers();
 
 app.Run();
 
+// Partial declaration required as part of logic to create web server for integration test run.
 public partial class Program { }

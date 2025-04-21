@@ -3,15 +3,14 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace ApiTests;
-public class IntegrationTest 
-    : IClassFixture<WebApplicationFactory<Program>>, IDisposable
+namespace ApiTests.IntegrationTests;
+public class IntegrationTestBase : IClassFixture<WebApplicationFactory<Program>>, IDisposable
 {
     private HttpClient? _httpClient;
 
     private readonly WebApplicationFactory<Program> _factory;
 
-    public IntegrationTest(WebApplicationFactory<Program> factory)
+    public IntegrationTestBase(WebApplicationFactory<Program> factory)
         => _factory = factory;
 
     protected HttpClient HttpClient

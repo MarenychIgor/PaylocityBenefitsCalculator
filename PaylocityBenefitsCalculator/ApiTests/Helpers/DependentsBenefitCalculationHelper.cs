@@ -1,8 +1,8 @@
 ﻿using Api.Extensions;
 
-namespace ApiTests
+namespace ApiTests.Helpers
 {
-    public class DependentsTestBase
+    public class DependentsBenefitCalculationHelper
     {
         private const int NUMBER_OF_PAYCHECKS = 26;
         private const decimal DEPENDENT_MONTLY_BASE_BENEFIT_COST = 600;

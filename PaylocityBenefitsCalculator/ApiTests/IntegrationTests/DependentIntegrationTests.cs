@@ -4,12 +4,13 @@ using System.Net;
 using System.Threading.Tasks;
 using Api.Dtos.Dependent;
 using Api.Models;
+using ApiTests.Extenstions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
-public class DependentIntegrationTests : IntegrationTest
+public class DependentIntegrationTests : IntegrationTestBase
 {
     public DependentIntegrationTests(WebApplicationFactory<Program> factory)
         : base(factory)

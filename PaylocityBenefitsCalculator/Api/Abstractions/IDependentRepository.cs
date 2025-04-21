@@ -2,10 +2,7 @@
 
 namespace Api.Abstractions
 {
-    public interface IDependentRepository
+    public interface IDependentRepository : IRepository<Dependent>
     {
-        Task<Dependent?> Get(int id);
-
-        Task<List<Dependent>> GetAll();
     }
 }

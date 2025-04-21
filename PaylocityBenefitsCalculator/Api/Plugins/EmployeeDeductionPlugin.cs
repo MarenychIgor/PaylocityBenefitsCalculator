@@ -6,6 +6,7 @@ namespace Api.DeductionPlugins
 {
     public class EmployeeDeductionPlugin : IDeductionPlugin
     {
+        // TODO: move to config
         private const int NUMBER_OF_PAYCHECKS = 26;
         private const decimal MONTLY_BASE_BENEFIT_COST = 1000;
         private const decimal YEARLY_SALARY_TRESHOLD_VALUE = 80000;

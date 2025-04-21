@@ -4,7 +4,7 @@ using Api.Extensions;
 using Api.Models;
 using Xunit;
 
-namespace ApiTests
+namespace ApiTests.UnitTests
 {
     public class EmployeeDeductionPluginTests
     {
@@ -33,7 +33,7 @@ namespace ApiTests
         {
             // Arrange
             var yearlySalary = 90000M;
-            var yearlyDeduction = (MONTLY_BASE_BENEFIT_COST * 12) + (yearlySalary * SALARY_ABOVE_TRESHOLD_COEFFICIENT);
+            var yearlyDeduction = MONTLY_BASE_BENEFIT_COST * 12 + yearlySalary * SALARY_ABOVE_TRESHOLD_COEFFICIENT;
             var deduction = (yearlyDeduction / NUMBER_OF_PAYCHECKS).Round();
             var employee = new Employee { Id = 1, Salary = yearlySalary };
 

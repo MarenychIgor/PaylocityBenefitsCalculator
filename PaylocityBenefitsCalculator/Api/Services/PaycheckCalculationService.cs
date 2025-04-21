@@ -7,6 +7,7 @@ namespace Api.Services
 {
     public class PaycheckCalculationService : IPaycheckCalculationService
     {
+        // TODO: move to config
         private const int NUMBER_OF_PAYCHECKS = 26;
 
         private readonly IEmployeeRepository _repository;

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api
 {
+    // EF in memory database approach allows to switch to real database by swapping context object only.
     public class InMemoryDbContext : DbContext
     {
         public DbSet<Employee> Employees { get; set; }

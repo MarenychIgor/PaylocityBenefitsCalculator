@@ -6,13 +6,14 @@ using Api.DeductionPlugins;
 using Api.Extensions;
 using Api.Models;
 using Api.Services;
+using ApiTests.Helpers;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Xunit;
 
-namespace ApiTests
+namespace ApiTests.UnitTests
 {
-    public class PaycheckCalculationServiceTests : DependentsTestBase
+    public class PaycheckCalculationServiceTests : DependentsBenefitCalculationHelper
     {
         private const int NUMBER_OF_PAYCHECKS = 26;
         private const decimal MONTLY_BASE_BENEFIT_COST = 1000;

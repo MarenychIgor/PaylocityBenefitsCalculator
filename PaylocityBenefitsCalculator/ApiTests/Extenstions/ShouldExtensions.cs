@@ -5,13 +5,13 @@ using Api.Models;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace ApiTests;
+namespace ApiTests.Extenstions;
 
 internal static class ShouldExtensions
 {
     public static Task ShouldReturn(this HttpResponseMessage response, HttpStatusCode expectedStatusCode)
     {
-        AssertCommonResponseParts(response, expectedStatusCode);
+        response.AssertCommonResponseParts(expectedStatusCode);
         return Task.CompletedTask;
     }
     

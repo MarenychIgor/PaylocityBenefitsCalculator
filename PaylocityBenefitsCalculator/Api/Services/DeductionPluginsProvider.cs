@@ -4,6 +4,7 @@ namespace Api.Services
 {
     public class DeductionPluginsProvider : IDeductionPluginsProvider
     {
+        // To achieve plug and play logic I'm instantiating objects for those classes which implements IDeductionPlugin.     
         public IEnumerable<IDeductionPlugin> GetPlugins()
         {
             var result = new List<IDeductionPlugin>();

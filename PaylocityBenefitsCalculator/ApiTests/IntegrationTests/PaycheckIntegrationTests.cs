@@ -4,12 +4,13 @@ using System.Net;
 using System.Threading.Tasks;
 using Api.Dtos.Paycheck;
 using Api.Models;
+using ApiTests.Extenstions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace ApiTests.IntegrationTests
 {
-    public class PaycheckIntegrationTests : IntegrationTest
+    public class PaycheckIntegrationTests : IntegrationTestBase
     {
         public PaycheckIntegrationTests(WebApplicationFactory<Program> factory)
             : base(factory)
