@@ -1,10 +1,11 @@
-﻿using Api.Models;
+﻿using Api.Abstractions;
+using Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api
 {
     // EF in memory database approach allows to switch to real database by swapping context object only.
-    public class InMemoryDbContext : DbContext
+    public class InMemoryDbContext : DbContext, IDbContext
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Dependent> Dependents { get; set; }

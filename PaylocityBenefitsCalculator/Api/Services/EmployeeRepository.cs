@@ -4,11 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository<TContext> : IEmployeeRepository
+        where TContext : DbContext, IDbContext, new()
     {
         public async Task<Employee?> Get(int id)
         {
-            using var context = new InMemoryDbContext();
+            using var context = new TContext();
 
             return await context.Employees.Include(x => x.Dependents)
                                           .FirstOrDefaultAsync(x => x.Id == id);
@@ -16,7 +17,7 @@ namespace Api.Services
 
         public async Task<List<Employee>> GetAll()
         {
-            using var context = new InMemoryDbContext();
+            using var context = new TContext();
 
             return await context.Employees.Include(x => x.Dependents)
                                           .ToListAsync();

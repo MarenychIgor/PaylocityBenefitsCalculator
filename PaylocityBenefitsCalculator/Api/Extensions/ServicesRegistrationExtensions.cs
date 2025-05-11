@@ -7,9 +7,10 @@ namespace Api.Extensions
     {
         public static void RegisterScoped(this IServiceCollection services)
         {
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository<InMemoryDbContext>>();
+            services.AddScoped<IDependentRepository, DependentRepository<InMemoryDbContext>>();
+
             services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IDependentRepository, DependentRepository>();
             services.AddScoped<IDependentService, DependentService>();
             services.AddScoped<IPaycheckCalculationService, PaycheckCalculationService>();
         }
